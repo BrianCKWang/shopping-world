@@ -48,7 +48,7 @@ function ProductList(state) {
   return (
     <div className="my-2">
       <h2>Our Products:</h2>
-      {state.products.length ? (
+      {state.products?.length ? (
         <div className="flex-row">
             {filterProducts().map(product => (
                 <ProductItem
@@ -70,4 +70,6 @@ function ProductList(state) {
   );
 }
 
-export default connect(ProductList);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(ProductList);

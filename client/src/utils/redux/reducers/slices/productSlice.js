@@ -1,21 +1,37 @@
-import { createSlice } from '@reduxjs/toolkit';
+// import { createSlice } from '@reduxjs/toolkit';
+import {
+  UPDATE_PRODUCTS,
+} from '../../actionTypes';
 
 const initialState = {
   products: [],
 };
 
-export const productSlice = createSlice({
-  name: 'product',
-  initialState,
+export default function (state = initialState, action) {
+  switch (action.type) {
+    case UPDATE_PRODUCTS:
+      // const { products } = action.payload;
+      return {
+        ...state,
+        products: [...action.payload.products],
+      };
+    default:
+      return state;
+  }
+}
 
-  reducers: {
-    // UPDATE_CATEGORIES,
-    update_product: (state, action)=> {
-      state.products = [...action.products];
-    },
-  },
-});
+// export const productSlice = createSlice({
+//   name: 'product',
+//   initialState,
 
-export const { update_product } = counterSlice.actions;
+//   reducers: {
+//     // UPDATE_CATEGORIES,
+//     update_product: (state, action)=> {
+//       state.products = [...action.products];
+//     },
+//   },
+// });
 
-export default productSlice.reducers;
+// export const { update_product } = productSlice.actions;
+
+// export default productSlice.reducers;

@@ -26,7 +26,7 @@ const Cart = (state) => {
 
   function submitCheckout() {
     const productIds = [];
-  
+
     state.cart.forEach((item) => {
       for (let i = 0; i < item.purchaseQuantity; i++) {
         productIds.push(item._id);
@@ -43,12 +43,12 @@ const Cart = (state) => {
       const cart = await idbPromise('cart', 'get');
       addMultipleToCart([...cart]);
     };
-  
-    if (!state.cart.length) {
+
+    if (!state.cart?.length) {
       getCart();
     }
-  // }, [state.cart.length, dispatch]);
-}, [state.cart.length]);
+    // }, [state.cart.length, dispatch]);
+  }, [state.cart?.length]);
 
   useEffect(() => {
     if (data) {
@@ -60,7 +60,7 @@ const Cart = (state) => {
 
   if (!state.cartOpen) {
     return (
-      <div className="cart-closed" onClick={toggleCart()}>
+      <div className="cart-closed" onClick={() => toggleCart}>
         <span
           role="img"
           aria-label="trash">🛒</span>
@@ -70,9 +70,9 @@ const Cart = (state) => {
 
   return (
     <div className="cart">
-      <div className="close" onClick={toggleCart()}>[close]</div>
+      <div className="close" onClick={() => toggleCart}>[close]</div>
       <h2>Shopping Cart</h2>
-      {state.cart.length ? (
+      {state.cart?.length ? (
         <div>
           {state.cart.map(item => (
             <CartItem key={item._id} item={item} />
@@ -101,4 +101,6 @@ const Cart = (state) => {
   );
 };
 
-export default connect(Cart);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(Cart);

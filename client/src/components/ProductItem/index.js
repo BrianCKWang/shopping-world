@@ -17,7 +17,7 @@ function ProductItem(state, item) {
     quantity
   } = item;
 
-  const [state, dispatch] = useStoreContext();
+  // const [state, dispatch] = useStoreContext();
   const { cart } = state;
 
   const handleAddToCart = () => {
@@ -52,4 +52,6 @@ function ProductItem(state, item) {
   );
 }
 
-export default connect(ProductItem);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(ProductItem);

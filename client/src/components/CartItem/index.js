@@ -57,4 +57,6 @@ const CartItem = ({ item }) => {
   );
 }
 
-export default connect(CartItem);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(CartItem);
