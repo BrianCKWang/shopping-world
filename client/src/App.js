@@ -12,9 +12,6 @@ import Success from "./pages/Success";
 import Nav from "./components/Nav";
 import OrderHistory from "./pages/OrderHistory";
 
-// import { StoreProvider } from "./utils/GlobalState";
-import { StoreProvider } from 'react-redux'
-
 const client = new ApolloClient({
   request: (operation) => {
     const token = localStorage.getItem('id_token')
@@ -32,7 +29,6 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <div>
-          <StoreProvider store={store}>
             <Nav />
             <Switch>
               <Route exact path="/" component={Home} />
@@ -43,7 +39,6 @@ function App() {
               <Route exact path="/success" component={Success} />
               <Route component={NoMatch} />
             </Switch>
-          </StoreProvider>
         </div>
       </Router>
     </ApolloProvider>
