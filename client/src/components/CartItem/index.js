@@ -1,16 +1,14 @@
 import React from 'react';
-import { useStoreContext } from '../../utils/GlobalState';
-import { REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from '../../utils/actions';
+
+import { removeFromCart, updateCartQuantity } from "../../utils/redux/actions";
+import { connect } from "react-redux";
+
 import { idbPromise } from "../../utils/helpers";
 
 const CartItem = ({ item }) => {
-  const [, dispatch] = useStoreContext();
 
-  const removeFromCart = item => {
-    dispatch({
-      type: REMOVE_FROM_CART,
-      _id: item._id
-    });
+  const handleRemoveFromCart = item => {
+    removeFromCart(item._id);
     idbPromise('cart', 'delete', { ...item });
   };
 
@@ -18,18 +16,11 @@ const CartItem = ({ item }) => {
     const value = e.target.value;
   
     if (value === '0') {
-      dispatch({
-        type: REMOVE_FROM_CART,
-        _id: item._id
-      });
+      removeFromCart(item._id);
     
       idbPromise('cart', 'delete', { ...item });
     } else {
-      dispatch({
-        type: UPDATE_CART_QUANTITY,
-        _id: item._id,
-        purchaseQuantity: parseInt(value)
-      });
+      updateCartQuantity(item._id, parseInt(value));
     
       idbPromise('cart', 'put', { ...item, purchaseQuantity: parseInt(value) });
     }
@@ -56,7 +47,7 @@ const CartItem = ({ item }) => {
           <span
             role="img"
             aria-label="trash"
-            onClick={() => removeFromCart(item)}
+            onClick={() => handleRemoveFromCart(item)}
           >
             🗑️
           </span>
@@ -66,4 +57,4 @@ const CartItem = ({ item }) => {
   );
 }
 
-export default CartItem;
+export default connect(CartItem);

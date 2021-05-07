@@ -5,12 +5,15 @@ import ProductItem from "../ProductItem";
 import { QUERY_PRODUCTS } from "../../utils/queries";
 import spinner from "../../assets/spinner.gif"
 
-import { useStoreContext } from '../../utils/GlobalState';
-import { UPDATE_PRODUCTS } from '../../utils/actions';
+// import { useStoreContext } from '../../utils/GlobalState';
+// import { UPDATE_PRODUCTS } from '../../utils/actions';
+import { updateProducts } from "../../utils/redux/actions";
+import { connect } from "react-redux";
+
 import { idbPromise } from "../../utils/helpers";
 
-function ProductList() {
-  const [state, dispatch] = useStoreContext();
+function ProductList(state) {
+  // const [state, dispatch] = useStoreContext();
 
   const { currentCategory } = state;
   
@@ -18,10 +21,7 @@ function ProductList() {
   
   useEffect(() => {
     if(data) {
-      dispatch({
-        type: UPDATE_PRODUCTS,
-        products: data.products
-      });
+      updateProducts( data.products );
   
       data.products.forEach((product) => {
         idbPromise('products', 'put', product);
@@ -31,13 +31,11 @@ function ProductList() {
       // since we're offline, get all of the data from the `products` store
       idbPromise('products', 'get').then((products) => {
         // use retrieved data to set global state for offline browsing
-        dispatch({
-          type: UPDATE_PRODUCTS,
-          products: products
-        });
+        updateProducts( data.products );
       });
     }
-  }, [data, loading, dispatch]);
+  // }, [data, loading, dispatch]);
+}, [data, loading]);
   
   function filterProducts() {
     if (!currentCategory) {
@@ -72,4 +70,4 @@ function ProductList() {
   );
 }
 
-export default ProductList;
+export default connect(ProductList);
