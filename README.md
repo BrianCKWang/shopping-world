@@ -31,7 +31,7 @@ Deployed on Heroku.
 
 ## Usage 
   
-  - Visit live website: [Link](https://immense-headland-44068.herokuapp.com/)
+  - Visit live website: [Link](https://afternoon-thicket-12281.herokuapp.com/)
 
 ## Contribution Guidelines
 
