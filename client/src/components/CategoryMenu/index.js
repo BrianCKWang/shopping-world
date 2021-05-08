@@ -12,33 +12,34 @@ function CategoryMenu(state) {
   // const categories = categoryData?.categories || [];
 
   // const [state, dispatch] = useStoreContext();
-
-  const { categories } = state;
+  
+  // const { categories } = state;
 
   const { loading, data: categoryData } = useQuery(QUERY_CATEGORIES);
 
+  
   useEffect(() => {
     if (categoryData) {
-      updateCategories( categoryData.categories );
+      state.dispatch(updateCategories( categoryData.categories ));
       categoryData.categories.forEach(category => {
         idbPromise('categories', 'put', category);
       });
     } else if (!loading) {
       idbPromise('categories', 'get').then(categories => {
-        updateCategories( categoryData.categories );
+        state.dispatch(updateCategories( categoryData.categories ));
       });
     }
   // }, [categoryData, loading, dispatch]);
-}, [categoryData, loading]);
+}, [categoryData, loading, state.dispatch]);
 
   const handleClick = id => {
-    updateCurrentCategory( id );
+    state.dispatch(updateCurrentCategory( id ));
   };
 
   return (
     <div>
       <h2>Choose a Category:</h2>
-      {categories?.map(item => (
+      {state.category?.categories?.map(item => (
         <button
           key={item._id}
           onClick={() => {
@@ -52,6 +53,9 @@ function CategoryMenu(state) {
   );
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  
+  return state
+};
 
 export default connect(mapStateToProps)(CategoryMenu);

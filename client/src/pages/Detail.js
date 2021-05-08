@@ -33,14 +33,14 @@ function Detail(state) {
     const itemInCart = cart.find((cartItem) => cartItem._id === id)
 
     if (itemInCart) {
-      updateCartQuantity( id, parseInt(itemInCart.purchaseQuantity) + 1);
+      state.dispatch(updateCartQuantity( id, parseInt(itemInCart.purchaseQuantity) + 1));
       // if we're updating quantity, use existing item data and increment purchaseQuantity value by one
       idbPromise('cart', 'put', {
         ...itemInCart,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
       });
     } else {
-      addToCart( { ...currentProduct, purchaseQuantity: 1 });
+      state.dispatch(addToCart( { ...currentProduct, purchaseQuantity: 1 }));
       // if product isn't in the cart yet, add it to the current shopping cart in IndexedDB
       idbPromise('cart', 'put', { ...currentProduct, purchaseQuantity: 1 });
     }
@@ -60,7 +60,7 @@ function Detail(state) {
     }
     // retrieved from server
     else if (data) {
-      updateProducts( data.products );
+      state.dispatch(updateProducts( data.products ));
 
       data.products.forEach((product) => {
         idbPromise('products', 'put', product);
@@ -69,11 +69,11 @@ function Detail(state) {
     // get cache from idb
     else if (!loading) {
       idbPromise('products', 'get').then((indexedProducts) => {
-        updateProducts( data.products );
+        state.dispatch(updateProducts( data.products ));
       });
     }
   // }, [products, data, loading, dispatch, id]);
-}, [products, data, loading, id]);
+}, [products, data, loading, id, state]);
 
   return (
     <>

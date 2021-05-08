@@ -18,7 +18,7 @@ const Cart = (state) => {
 
   function calculateTotal() {
     let sum = 0;
-    state.cart.forEach(item => {
+    state.cart.cart.forEach(item => {
       sum += item.price * item.purchaseQuantity;
     });
     return sum.toFixed(2);
@@ -27,7 +27,7 @@ const Cart = (state) => {
   function submitCheckout() {
     const productIds = [];
 
-    state.cart.forEach((item) => {
+    state.cart.cart.forEach((item) => {
       for (let i = 0; i < item.purchaseQuantity; i++) {
         productIds.push(item._id);
       }
@@ -38,17 +38,21 @@ const Cart = (state) => {
     });
   }
 
+  function handleToggleCart(){
+    state.dispatch(toggleCart());
+  }
+
   useEffect(() => {
     async function getCart() {
       const cart = await idbPromise('cart', 'get');
-      addMultipleToCart([...cart]);
+      state.dispatch(addMultipleToCart([...cart]));
     };
 
-    if (!state.cart?.length) {
+    if (!state.cart.cart.length) {
       getCart();
     }
     // }, [state.cart.length, dispatch]);
-  }, [state.cart?.length]);
+  }, [state.cart.cart.length, state.dispatch]);
 
   useEffect(() => {
     if (data) {
@@ -58,9 +62,9 @@ const Cart = (state) => {
     }
   }, [data]);
 
-  if (!state.cartOpen) {
+  if (!state.cart.cartOpen) {
     return (
-      <div className="cart-closed" onClick={() => toggleCart}>
+      <div className="cart-closed" onClick={handleToggleCart}>
         <span
           role="img"
           aria-label="trash">🛒</span>
@@ -70,11 +74,11 @@ const Cart = (state) => {
 
   return (
     <div className="cart">
-      <div className="close" onClick={() => toggleCart}>[close]</div>
+      <div className="close" onClick={handleToggleCart}>[close]</div>
       <h2>Shopping Cart</h2>
-      {state.cart?.length ? (
+      {state.cart.cart.length ? (
         <div>
-          {state.cart.map(item => (
+          {state.cart.cart.map(item => (
             <CartItem key={item._id} item={item} />
           ))}
           <div className="flex-row space-between">

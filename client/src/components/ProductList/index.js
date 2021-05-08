@@ -15,13 +15,13 @@ import { idbPromise } from "../../utils/helpers";
 function ProductList(state) {
   // const [state, dispatch] = useStoreContext();
 
-  const { currentCategory } = state;
+  const { currentCategory } = state.category;
   
   const { loading, data } = useQuery(QUERY_PRODUCTS);
   
   useEffect(() => {
     if(data) {
-      updateProducts( data.products );
+      state.dispatch(updateProducts( data.products ));
   
       data.products.forEach((product) => {
         idbPromise('products', 'put', product);
@@ -31,7 +31,7 @@ function ProductList(state) {
       // since we're offline, get all of the data from the `products` store
       idbPromise('products', 'get').then((products) => {
         // use retrieved data to set global state for offline browsing
-        updateProducts( data.products );
+        state.dispatch(updateProducts( data.products ));
       });
     }
   // }, [data, loading, dispatch]);
@@ -39,16 +39,17 @@ function ProductList(state) {
   
   function filterProducts() {
     if (!currentCategory) {
-      return state.products;
+      return state.product.products;
     }
   
-    return state.products.filter(product => product.category._id === currentCategory);
+    return state.product.products.filter(product => product.category._id === currentCategory);
   }
 
+  console.log()
   return (
     <div className="my-2">
       <h2>Our Products:</h2>
-      {state.products?.length ? (
+      {state.product?.products?.length ? (
         <div className="flex-row">
             {filterProducts().map(product => (
                 <ProductItem

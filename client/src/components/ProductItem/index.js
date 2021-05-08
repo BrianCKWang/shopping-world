@@ -8,28 +8,31 @@ import { connect } from "react-redux";
 
 import { idbPromise } from "../../utils/helpers";
 
-function ProductItem(state, item) {
+function ProductItem(state) {
+//  console.log(state)
+ const item = state.ownProps;
   const {
     image,
     name,
     _id,
     price,
     quantity
-  } = item;
+  } = state.ownProps;
 
   // const [state, dispatch] = useStoreContext();
   const { cart } = state;
 
+  // console.log(cart)
   const handleAddToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === _id)
     if (itemInCart) {
-      updateCartQuantity( _id, parseInt(itemInCart.purchaseQuantity) + 1 );
+      state.dispatch(updateCartQuantity( _id, parseInt(itemInCart.purchaseQuantity) + 1 ));
       idbPromise('cart', 'put', {
         ...itemInCart,
         purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
       });
     } else {
-      addToCart( { ...item, purchaseQuantity: 1 });
+      state.dispatch(addToCart( { ...item, purchaseQuantity: 1 }));
       idbPromise('cart', 'put', { ...item, purchaseQuantity: 1 });
     }
   }
@@ -52,6 +55,11 @@ function ProductItem(state, item) {
   );
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = (state, ownProps) =>({
+  cart: state.cart.cart,
+  ownProps
+})
+
+
 
 export default connect(mapStateToProps)(ProductItem);

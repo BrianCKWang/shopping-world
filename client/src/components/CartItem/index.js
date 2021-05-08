@@ -5,10 +5,10 @@ import { connect } from "react-redux";
 
 import { idbPromise } from "../../utils/helpers";
 
-const CartItem = ({ item }) => {
-
+const CartItem = (state) => {
+ const {item} = state;
   const handleRemoveFromCart = item => {
-    removeFromCart(item._id);
+    state.dispatch(removeFromCart(item._id));
     idbPromise('cart', 'delete', { ...item });
   };
 
@@ -16,11 +16,11 @@ const CartItem = ({ item }) => {
     const value = e.target.value;
   
     if (value === '0') {
-      removeFromCart(item._id);
+      state.dispatch(removeFromCart(item._id));
     
       idbPromise('cart', 'delete', { ...item });
     } else {
-      updateCartQuantity(item._id, parseInt(value));
+      state.dispatch(updateCartQuantity(item._id, parseInt(value)));
     
       idbPromise('cart', 'put', { ...item, purchaseQuantity: parseInt(value) });
     }
