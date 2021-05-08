@@ -15,7 +15,8 @@ import spinner from '../assets/spinner.gif'
 import { 
   updateCartQuantity, 
   addToCart, 
-  updateProducts 
+  updateProducts,
+  removeFromCart
 } from "../utils/redux/actions";
 import { connect } from "react-redux";
 
@@ -24,7 +25,8 @@ import { idbPromise } from "../utils/helpers";
 
 function Detail(state) {
   // const [state, dispatch] = useStoreContext();
-  const { products, cart } = state;
+  const { products } = state.product;
+  const { cart } = state.cart;
   const { id } = useParams();
   const [currentProduct, setCurrentProduct] = useState({})
   const { loading, data } = useQuery(QUERY_PRODUCTS);
@@ -46,8 +48,8 @@ function Detail(state) {
     }
   }
 
-  const removeFromCart = () => {
-    removeFromCart( currentProduct._id );
+  const handleRemoveFromCart = () => {
+    state.dispatch(removeFromCart( currentProduct._id ));
 
     // upon removal from cart, delete the item from IndexedDB using the `currentProduct._id` to locate what to remove
     idbPromise('cart', 'delete', { ...currentProduct });
@@ -98,7 +100,7 @@ function Detail(state) {
             </button>
             <button
               disabled={!cart.find(p => p._id === currentProduct._id)}
-              onClick={removeFromCart}
+              onClick={handleRemoveFromCart}
             >
               Remove from Cart
             </button>
