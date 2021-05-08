@@ -11,7 +11,7 @@ To implement a e-commerce platform capable of user login and order placing utili
 
 Deployed on Heroku.
 
-![main pic](https://github.com/BrianCKWang/shopping-world/blob/master/public/img/main-01.png)
+![main pic](https://github.com/BrianCKWang/shopping-world/blob/main/public/img/main-01.png)
 
 ## Table of Contents
 * [Installation](#installation)
